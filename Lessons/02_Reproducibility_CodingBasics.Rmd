@@ -72,7 +72,7 @@ Below is a chunk of R code. You can run R code in several ways:
 
 ```{r}
 # Basic math
-1 + 1
+1 + 1 #control + enter to run code
 1 - 1
 2 * 2
 1 / 2
@@ -92,8 +92,8 @@ median(5, 4, 6, 4, 6)
 # Conditional statements
 4 > 5
 4 < 5
-4 != 5
-4 == 5
+4 != 5 #different than
+4 == 5 #equal to 
 
 ```
 
@@ -141,7 +141,7 @@ Within your R code, it is often useful to include notes about your workflow. So 
 R functions are the major tool used in R. Functions can do virtually unlimited things within the R universe, but each function requires specific inputs that are provided under specific syntax. We will start with a simple function that is built into R, `seq`
 
 ```{r}
-seq(1, 10)
+seq(1, 10) #generates a sequence of numbers in the parentheses
 ten_sequence <- seq(1, 10)
 ten_sequence
 
@@ -196,7 +196,7 @@ recipe3 <- function(x, f){
 
 doublecomplexmeal <- recipe3(x = 5, f = 2)
 doublecomplexmeal
-doublecomplexmeal$mix1
+doublecomplexmeal$mix1 #use dollar sign to get any object in the list
 ```
 
 Make a recipe based on the ingredients you have
