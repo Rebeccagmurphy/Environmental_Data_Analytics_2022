@@ -100,7 +100,7 @@ Commons functions to import datasets and store as data frames are *read.table()*
 #read.csv("/Users/lmm89/OneDrive/Duke_University/7_Spring2021/ENV872_EDA/GitRepo_EDA_S2021/Environmental_Data_Analytics_2021/Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 
 # Relative file path (friendly for users regardless of machine)
-USGS.flow.data <- read.csv("../Data/Raw/USGS_Site02085000_Flow_Raw.csv")   
+USGS.flow.data <- read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")   
 #For knitting the .Rmd file you need to added an extra "." to the relative path
 # R Markdown documents are compiled in separate R sessions to enhance reproducibility, so you current R console has nothing to do with the compilation of the R Markdown documents.
 
@@ -119,7 +119,7 @@ USGS.flow.data <- read.csv("../Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 ## EXPLORE YOUR DATASET
 
 Take a moment to read through the README file associated with the USGS dataset on discharge at the Eno River. Where can you find this file? How does the placement and information found in this file relate to the best practices for reproducible data analysis?
-> ANSWER: 
+> ANSWER: Find in Metadata folder; 
 
 ```{r exploredata}
 View(USGS.flow.data)
@@ -201,7 +201,7 @@ In some cases when dates are provided as integers, you may need to provide an or
 ```{r formatDate}
 help(as.Date)
 
-
+#needs two main inputs- column name of dataset and what type of format that you want (see above for the two options)
 USGS.flow.data$datetime <- as.Date(USGS.flow.data$datetime, format = "%m/%d/%y") 
 ```
 
@@ -211,7 +211,7 @@ Note that for every date prior to 1969, R has assigned the date in the 2000s rat
 # 
 USGS.flow.data$datetime <- format(USGS.flow.data$datetime, "%y%m%d")
 
-#
+# paste0 glues strings together e.g. gluing 19 and 20 to the dates
 create.early.dates <- (function(d) {
        paste0(ifelse(d > 191226,"19","20"),d)
        })
@@ -230,7 +230,7 @@ We just edited our raw dataset into a processed form. We may want to return to t
 
 ```{r savingdata}
 # Note the added "." again for .Rmd 
-write.csv(USGS.flow.data, file = "../Data/Processed/USGS_Site02085000_Flow_Processed.csv", row.names=FALSE)
+write.csv(USGS.flow.data, file = "./Data/Processed/USGS_Site02085000_Flow_Processed.csv", row.names=FALSE)
 
 ```
 
