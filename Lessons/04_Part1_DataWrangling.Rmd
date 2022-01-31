@@ -24,10 +24,10 @@ Opening discussion: why might we be interested in long-term observations of temp
 ```{r, message = FALSE}
 getwd()
 #install.packages(tidyverse)
-library(tidyverse)
+library(tidyverse) #Just a collection of packages
 #install.packages(lubridate)
-library(lubridate)
-NTL.phys.data <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = TRUE)
+library(lubridate) #Just for date functions
+NTL.phys.data <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = TRUE) #allows summary to work for character entries
 
 colnames(NTL.phys.data)
 head(NTL.phys.data)
@@ -40,7 +40,7 @@ class(NTL.phys.data$sampledate)
 NTL.phys.data$sampledate <- as.Date(NTL.phys.data$sampledate, format = "%m/%d/%y")
 ```
 
-## Data Wrangling
+## Data Wrangling aka cleaning the dataset
 
 Data wrangling extends data exploration: it allows you to process data in ways that are useful for you. An important part of data wrangling is creating *tidy datasets*, with the following rules: 
 
@@ -57,6 +57,20 @@ What is the best way to wrangle data? There are multiple ways to arrive at a spe
 ```{r, results = "hide"}
 vignette("dplyr")
 ```
+
+Rows:
+- filter() chooses rows based on column values.
+- slice() chooses rows based on location.
+- arrange() changes the order of the rows.
+
+Columns:
+- select() changes whether or not a column is included.
+- rename() changes the name of columns.
+- mutate() changes the values of columns and creates new columns.
+- relocate() changes the order of the columns.
+
+Groups of rows:
+- summarize() collapses a group into a single row.
 
 ### Filter
 
@@ -77,10 +91,11 @@ class(NTL.phys.data$lakeid)
 class(NTL.phys.data$depth)
 
 # matrix filtering
-NTL.phys.data.surface1 <- NTL.phys.data[NTL.phys.data$depth == 0,]
+NTL.phys.data.surface1 <- NTL.phys.data[NTL.phys.data$depth == 0,] #if you want to look at surface information (aka rows where depth is at 0)
+#again note that [0,9], 0 is row, 9 is column
 
 # dplyr filtering
-NTL.phys.data.surface2 <- filter(NTL.phys.data, depth == 0)
+NTL.phys.data.surface2 <- filter(NTL.phys.data, depth == 0) #first argument is dataset, second is what you want to filter
 NTL.phys.data.surface3 <- filter(NTL.phys.data, depth < 0.25)
 
 # Did the methods arrive at the same result?
@@ -99,13 +114,15 @@ NTL.phys.data.PeterPaul2 <- filter(NTL.phys.data, lakename != "Central Long Lake
                                      lakename != "Hummingbird Lake" & lakename != "Tuesday Lake" &
                                      lakename != "Ward Lake" & lakename != "West Long Lake")
 NTL.phys.data.PeterPaul3 <- filter(NTL.phys.data, lakename %in% c("Paul Lake", "Peter Lake"))
+#cleaner way to filter the data set
+
 
 # Choose a range of conditions of a numeric or integer variable
 summary(NTL.phys.data$daynum)
 NTL.phys.data.JunethruOctober1 <- filter(NTL.phys.data, daynum > 151 & daynum < 305)
-NTL.phys.data.JunethruOctober2 <- filter(NTL.phys.data, daynum > 151, daynum < 305)
+NTL.phys.data.JunethruOctober2 <- filter(NTL.phys.data, daynum > 151, daynum < 305) #same thing as above, considered combination of both
 NTL.phys.data.JunethruOctober3 <- filter(NTL.phys.data, daynum >= 152 & daynum <= 304)
-NTL.phys.data.JunethruOctober4 <- filter(NTL.phys.data, daynum %in% c(152:304))
+NTL.phys.data.JunethruOctober4 <- filter(NTL.phys.data, daynum %in% c(152:304)) #again, cleanest option.... 
 
 # Exercise: 
 # filter NTL.phys.data for the year 1999
@@ -130,7 +147,9 @@ NTL.phys.data.depth.ascending <- arrange(NTL.phys.data, depth)
 NTL.phys.data.depth.descending <- arrange(NTL.phys.data, desc(depth))
 
 # Exercise: 
-# Arrange NTL.phys.data by temperature, in descending order. 
+# Arrange NTL.phys.data by temperature, in descending order.
+NTL.phys.data.temp.descending <- arrange(NTL.phys.data, desc(temperature_C))
+
 # Which dates, lakes, and depths have the highest temperatures?
 
 
@@ -183,6 +202,7 @@ NTL.phys.data.processed <-
   select(lakename, sampledate:temperature_C) %>%
   mutate(temperature_F = (temperature_C*9/5) + 32)
   
+# %>% - means next or then... 
 ```
 
 Notice that we did not place the dataset name inside the wrangling function but rather at the beginning.
